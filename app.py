@@ -27,7 +27,7 @@ def scrape_article(url):
 # Function to summarize text
 def summarize_text(text):
     # Use OpenAI API for summarization (can be replaced with other methods)
-    openai_api_key = os.getenv("OPENAI_API_KEY")  # Set your API key as an environment variable
+    openai_api_key = "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"
     openai = OpenAI(api_key=openai_api_key)
     
     prompt = f"Summarize the following article:\n\n{text}"
