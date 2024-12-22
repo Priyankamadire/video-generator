@@ -50,16 +50,22 @@ def generate_video_url(timed_video_searches, video_server):
 def generate_script(article_text):
     try:
         prompt = f"Summarize the following article and focus on the key events such as layoffs, restructuring, and changes introduced by the company. Provide the most relevant details.\n\n{article_text}"
-        response = openai.Completion.create(
-            model="gpt-3.5-turbo",  # Or use "gpt-4"
-            prompt=prompt,
+
+        # Use the updated ChatCompletion method
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",  # Or "gpt-4"
+            messages=[{"role": "system", "content": "You are a helpful assistant."},
+                      {"role": "user", "content": prompt}],
             max_tokens=200,
             temperature=0.5
         )
-        return response.choices[0].text.strip()
-    except openai.error.OpenAIError as e:
-        print(f"OpenAI API error: {e}")
+        
+        return response['choices'][0]['message']['content'].strip()
+
+    except Exception as e:
+        print(f"Error occurred while generating script: {e}")
         return ""
+
 
 if __name__ == "__main__":
     # Modify the argument to accept URL
