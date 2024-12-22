@@ -19,9 +19,12 @@ def scrape_article(url):
     response = requests.get(url)
     soup = BeautifulSoup(response.content, "html.parser")
     
-    # Extract text (modify based on the website structure)
+    # Extract paragraphs but exclude irrelevant sections (e.g., ads, navigation)
     paragraphs = soup.find_all("p")
-    article_text = " ".join([p.get_text() for p in paragraphs])
+    article_text = " ".join([p.get_text() for p in paragraphs if p.get_text()])
+    
+    # Clean up the text by removing unwanted characters (optional, but useful)
+    article_text = article_text.replace("\n", " ").strip()
     return article_text
 
 # Modify generate_video_url to handle unpacking of more than 2 values in timed_video_searches
@@ -33,6 +36,17 @@ def generate_video_url(timed_video_searches, video_server):
         video_url = f"{video_server}/search?q={search_terms}"  # Example URL generation
         background_video_urls.append(video_url)
     return background_video_urls
+
+# Modify generate_script to summarize the article text and focus on relevant points
+def generate_script(article_text):
+    prompt = f"Summarize the following article and focus on the key events such as layoffs, restructuring, and changes introduced by the company. Provide the most relevant details.\n\n{article_text}"
+    response = openai.Completion.create(
+        engine="text-davinci-003",  # Or use any other model you prefer
+        prompt=prompt,
+        max_tokens=200,  # Adjust length based on needs
+        temperature=0.5  # Lower temperature to focus on accuracy
+    )
+    return response.choices[0].text.strip()
 
 if __name__ == "__main__":
     # Modify the argument to accept URL
@@ -48,7 +62,7 @@ if __name__ == "__main__":
     article_text = scrape_article(ARTICLE_URL)
     print("Article text extracted.")
 
-    # Step 2: Use the article text to generate a script
+    # Step 2: Use the article text to generate a focused script
     response = generate_script(article_text)
     print("Script generated:\n", response)
 
