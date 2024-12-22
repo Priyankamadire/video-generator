@@ -24,6 +24,16 @@ def scrape_article(url):
     article_text = " ".join([p.get_text() for p in paragraphs])
     return article_text
 
+# Modify generate_video_url to handle unpacking of more than 2 values in timed_video_searches
+def generate_video_url(timed_video_searches, video_server):
+    # Assuming timed_video_searches contains 3 elements: ((t1, t2), search_terms, extra_info)
+    background_video_urls = []
+    for (t1, t2), search_terms, _ in timed_video_searches:
+        # Example logic: generate video URLs based on search_terms (adjust this based on your use case)
+        video_url = f"{video_server}/search?q={search_terms}"  # Example URL generation
+        background_video_urls.append(video_url)
+    return background_video_urls
+
 if __name__ == "__main__":
     # Modify the argument to accept URL
     parser = argparse.ArgumentParser(description="Generate a video from an article URL.")
