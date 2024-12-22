@@ -31,12 +31,16 @@ def summarize_text(text):
     openai = OpenAI(api_key=openai_api_key)
     
     prompt = f"Summarize the following article:\n\n{text}"
-    response = openai.Completion.create(
-        engine="text-davinci-003",
+    
+    # Adjusted to use 'completions' instead of 'Completion'
+    response = openai.completions.create(
+        engine="text-davinci-003",  # You can change the model to suit your needs
         prompt=prompt,
         max_tokens=300
     )
-    summary = response["choices"][0]["text"].strip()
+    
+    # Extracting the summary from the response
+    summary = response['choices'][0]['text'].strip()
     return summary
 
 if __name__ == "__main__":
