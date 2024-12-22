@@ -1,4 +1,4 @@
-from openai import OpenAI
+import openai  # Add this import to make the OpenAI API accessible
 import os
 import edge_tts
 import json
