@@ -9,15 +9,6 @@ from utility.render.render_engine import render_video
 from utility.video.video_search_query_generator import generate_video_url, merge_empty_intervals
 
 def scrape_article_content(article_url):
-    """
-    Scrape article content from the provided URL using BeautifulSoup.
-
-    Parameters:
-        article_url (str): The URL of the article to scrape.
-
-    Returns:
-        str: The scraped article content.
-    """
     try:
         response = requests.get(article_url)
         response.raise_for_status()
@@ -44,7 +35,6 @@ if __name__ == "__main__":
     VIDEO_SERVER = "pexel"
 
     try:
-        # Step 1: Scrape article content
         article_content = scrape_article_content(ARTICLE_URL)
         print(f"Scraped Article Content: {article_content[:500]}...")
     except Exception as e:
@@ -52,7 +42,6 @@ if __name__ == "__main__":
         exit(1)
 
     try:
-        # Step 2: Generate script from article content
         script = generate_script(article_content)
         print(f"Generated Script: {script}")
     except Exception as e:
@@ -60,7 +49,6 @@ if __name__ == "__main__":
         exit(1)
 
     try:
-        # Step 3: Generate audio from the script
         asyncio.run(generate_audio(script, AUDIO_FILE_NAME))
         print(f"Audio file generated: {AUDIO_FILE_NAME}")
     except Exception as e:
@@ -68,7 +56,6 @@ if __name__ == "__main__":
         exit(1)
 
     try:
-        # Step 4: Generate timed captions
         timed_captions = generate_timed_captions(AUDIO_FILE_NAME)
         print(f"Timed Captions: {timed_captions}")
     except Exception as e:
@@ -76,7 +63,6 @@ if __name__ == "__main__":
         exit(1)
 
     try:
-        # Step 5: Generate video search terms
         search_terms = generate_video_url(script, timed_captions)
         print(f"Search Terms for Videos: {search_terms}")
     except Exception as e:
@@ -84,7 +70,6 @@ if __name__ == "__main__":
         search_terms = None
 
     try:
-        # Step 6: Merge empty intervals in video URLs
         background_video_urls = merge_empty_intervals(search_terms)
         if background_video_urls:
             print(f"Background Video URLs: {background_video_urls}")
@@ -95,7 +80,6 @@ if __name__ == "__main__":
         background_video_urls = None
 
     try:
-        # Step 7: Render the final video
         if background_video_urls:
             render_video(AUDIO_FILE_NAME, timed_captions, background_video_urls, OUTPUT_FILE_NAME, VIDEO_SERVER)
             print(f"Video successfully created: {OUTPUT_FILE_NAME}")
