@@ -2,7 +2,7 @@ import argparse
 import asyncio
 import requests
 from bs4 import BeautifulSoup
-from script_generator import generate_script
+from utility.script.script_generator import generate_script
 from utility.audio.audio_generator import generate_audio
 from utility.captions.timed_captions_generator import generate_timed_captions
 from utility.render.render_engine import render_video
